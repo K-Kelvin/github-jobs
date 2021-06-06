@@ -1,9 +1,11 @@
+import { useCallback, useEffect } from "react";
 import { useHistory, useLocation } from "react-router";
 import dompurify from "dompurify";
-import { ClockIcon, GlobeIcon } from "components/Icons";
+
+import { ArrowBackIcon, ClockIcon, GlobeIcon } from "components/Icons";
 import { JobProps } from "components/JobCard";
 import imgNotFound from "images/not_found.png";
-import { useCallback, useEffect } from "react";
+import getTimeAgoString from "utils/dateUtils";
 
 const JobDetail = () => {
     const { state: job }: { state: JobProps } = useLocation();
@@ -37,7 +39,7 @@ const JobDetail = () => {
                     className="focus:outline-none flex items-center gap-3 text-blue"
                     onClick={() => history.goBack()}
                 >
-                    ⬅ Back to search
+                    <ArrowBackIcon /> Back to search
                 </button>
                 <h3 className="uppercase font-bold text-grayish mb-2 mt-9 font-poppins">
                     How to apply
@@ -59,7 +61,8 @@ const JobDetail = () => {
                     </span>
                 </div>
                 <div className="flex items-center gap-2 text-lightGrayish">
-                    <ClockIcon />5 days ago
+                    <ClockIcon />
+                    {getTimeAgoString(job.created_at)}
                 </div>
                 <div className="flex gap-3 mt-9">
                     <img

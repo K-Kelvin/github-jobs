@@ -1,5 +1,6 @@
 import { useHistory } from "react-router";
 import { ClockIcon, GlobeIcon } from "./Icons";
+import getTimeAgoString from "utils/dateUtils";
 import imgNotFound from "images/not_found.png";
 
 export interface JobProps {
@@ -45,8 +46,8 @@ const JobCard = (job: JobProps) => {
                             {job.location}
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <ClockIcon className="flex-shrink-0 flex-grow-0" />5
-                            days ago
+                            <ClockIcon className="flex-shrink-0 flex-grow-0" />
+                            {getTimeAgoString(job.created_at)}
                         </div>
                     </div>
                 </div>
