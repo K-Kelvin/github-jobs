@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BriefcaseIcon, GlobeIcon } from "components/Icons";
 import JobCard, { JobProps } from "components/JobCard";
 import api from "api";
@@ -19,7 +19,6 @@ const Home = () => {
     const [location, setLocation] = useState<string | null>(null);
     const [description, setDescription] = useState<string>("");
 
-    const cancelToken = useRef<any>();
     const getData = () => {
         setLoading(true);
         api.get("", {
@@ -29,9 +28,6 @@ const Home = () => {
                 location: location,
                 full_time: fullTime ? "true" : "false",
             },
-            cancelToken: new axios.CancelToken(cToken => {
-                cancelToken.current = cToken;
-            }),
         })
             .then(res => {
                 setLoading(false);
@@ -44,10 +40,8 @@ const Home = () => {
             });
     };
 
-    // eslint-disable-next-line
     useEffect(() => {
         getData();
-        return cancelToken.current;
         // eslint-disable-next-line
     }, []);
 
