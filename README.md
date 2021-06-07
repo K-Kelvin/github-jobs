@@ -89,4 +89,4 @@ $ npm start
 <!-- -   Website [your-website.com](https://{your-web-site-link}) -->
 
 -   GitHub [K-Kelvin](https://github.com/K-Kelvin)
--   Twitter [@your-twitter](https://twitter.com/k_kijanda)
+-   Twitter [k_kijanda](https://twitter.com/k_kijanda)
