@@ -1,9 +1,23 @@
+import { pageContent } from "pages/Home";
+
 interface PaginatorProps {
     readonly page: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
+    numOfPages: number;
+    pageContents: pageContent;
 }
-const Paginator = ({ page, setPage }: PaginatorProps) => {
-    const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+const Paginator = ({
+    page,
+    setPage,
+    numOfPages,
+    pageContents,
+}: PaginatorProps) => {
+    const pages: number[] = [];
+    for (let i = 0; i < numOfPages; i++) {
+        pages.push(i + 1);
+    }
+
     return (
         <div className="my-5 text-grayish flex items-center gap-3">
             <Button

@@ -13,13 +13,27 @@ const cities = [
     { id: "berlin", label: "Berlin" },
 ];
 
+export interface pageContent {
+    [key: string]: JobProps[];
+}
+/* 
+    Example:
+const pageContents_ = {
+    "1": [{nam:"", desc:"", location:""}, {nam:"", desc:"", location:""}],
+    "2": [{nam:"", desc:"", location:""}, {nam:"", desc:"", location:""}],
+    "3": [{nam:"", desc:"", location:""}, {nam:"", desc:"", location:""}],
+}
+*/
+
 const Home = () => {
     const [loading, setLoading] = useState(false);
-    const [jobs, setJobs] = useState<JobProps[]>([]);
-    const [page, setPage] = useState<number>(1);
+    // const [jobs, setJobs] = useState<JobProps[]>([]);
     const [fullTime, setFulltime] = useState<boolean>(false);
     const [location, setLocation] = useState<string | null>(null);
     const [description, setDescription] = useState<string>("");
+    const [page, setPage] = useState<number>(1);
+    const [numOfPages, setNumOfPages] = useState<number>(0);
+    const [pageContents, setPageContents] = useState<pageContent>({});
 
     const getData = () => {
         setLoading(true);
@@ -33,7 +47,19 @@ const Home = () => {
         })
             .then(res => {
                 setLoading(false);
-                setJobs(res.data?.slice(0, 10));
+                // setJobs(res.data);
+                const totalPages = Math.ceil(res.data.length / 10);
+                setNumOfPages(totalPages);
+                setPageContents({});
+                for (let i = 0; i < totalPages; i++) {
+                    setPageContents(prevContents => ({
+                        ...prevContents,
+                        [(i + 1).toString()]: res.data.slice(
+                            i * 10,
+                            (i + 1) * 10
+                        ),
+                    }));
+                }
             })
             .catch(err => {
                 if (axios.isCancel(err)) return;
@@ -45,7 +71,7 @@ const Home = () => {
     useEffect(() => {
         getData();
         // eslint-disable-next-line
-    }, [page]);
+    }, []);
 
     return (
         <div>
@@ -119,10 +145,15 @@ const Home = () => {
                             Loading...
                         </p>
                     )}
-                    {jobs?.map(job => (
+                    {pageContents?.[page.toString()]?.map(job => (
                         <JobCard key={job.id} {...job} />
                     ))}
-                    <Paginator page={page} setPage={setPage} />
+                    <Paginator
+                        page={page}
+                        setPage={setPage}
+                        numOfPages={numOfPages}
+                        pageContents={pageContents}
+                    />
                 </div>
             </div>
         </div>
