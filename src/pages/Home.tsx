@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+
 import { BriefcaseIcon, GlobeIcon } from "components/Icons";
 import JobCard, { JobProps } from "components/JobCard";
 import api from "api";
-import axios from "axios";
+import Paginator from "components/Paginator";
 
 const cities = [
     { id: "london", label: "London" },
     { id: "amsterdam", label: "Amsterdam" },
-    { id: "new york", label: "New York" },
+    { id: "new+york", label: "New York" },
     { id: "berlin", label: "Berlin" },
 ];
 
@@ -31,7 +33,7 @@ const Home = () => {
         })
             .then(res => {
                 setLoading(false);
-                setJobs(res.data);
+                setJobs(res.data?.slice(0, 10));
             })
             .catch(err => {
                 if (axios.isCancel(err)) return;
@@ -43,7 +45,7 @@ const Home = () => {
     useEffect(() => {
         getData();
         // eslint-disable-next-line
-    }, []);
+    }, [page]);
 
     return (
         <div>
@@ -117,12 +119,10 @@ const Home = () => {
                             Loading...
                         </p>
                     )}
-                    <div className="hidden" onClick={() => setPage(p => p + 1)}>
-                        Next
-                    </div>
                     {jobs?.map(job => (
                         <JobCard key={job.id} {...job} />
                     ))}
+                    <Paginator page={page} setPage={setPage} />
                 </div>
             </div>
         </div>
